@@ -3,21 +3,27 @@
 <head>
 	<meta charset="utf-8">
 	<title>Browser Events</title>
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-grid/3.2.9/ui-grid.min.css">
+	<style media="screen">
+		.myGrid{
+			
+		}
+	</style>
 </head>
 <body ng-app="BrowserEvent" ng-strict-di>
 	<div ng-controller="HomeController as home">
-		<div ng-repeat="event in home.events">
-			<span ng-bind="event | json"></span>
-		</div>
+		<div ui-grid="{ data: home.events }" class="myGrid"></div>
 	</div>
 
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-grid/3.2.9/ui-grid.min.js"></script>
 	<script type="text/javascript">
 		(function(angular){
 			'use strict';
 
 			angular
-				.module('BrowserEvent', [])
+				.module('BrowserEvent', ['ui.grid'])
 				.run(Run)
 				.controller('HomeController', HomeController);
 
