@@ -12,7 +12,7 @@ import (
 )
 
 type Event struct {
-	Timestamp	int32
+	Timestamp	int32 `json:"time"`
 	Message      string `json:"msg"`
 	URL          string `json:"url"`
 	LineNumber   int `json:"lineNo"`
@@ -20,13 +20,17 @@ type Event struct {
 	ErrorObject  string `json:"error"`
 }
 
+const Client string = "*"
+
 var events []Event
 
 func GetEventsEndpoint(w http.ResponseWriter, req *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", Client)
 	json.NewEncoder(w).Encode(events)
 }
 
 func CreateEventEndpoint(w http.ResponseWriter, req *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", Client)
 	var event Event
 
 	_ = json.NewDecoder(req.Body).Decode(&event)
@@ -42,7 +46,7 @@ func CreateEventEndpoint(w http.ResponseWriter, req *http.Request) {
 }
 
 func CreateEventEndpointPreFlight(w http.ResponseWriter, req *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Origin", Client)
 	w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
 	w.Header().Set("Access-Control-Allow-Headers",	"Content-Type")
 	return

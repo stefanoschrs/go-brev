@@ -4,126 +4,17 @@
 	<meta charset="utf-8">
 	<title>Browser Events</title>
 
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-grid/3.2.9/ui-grid.min.css">
-	<style media="screen">
-		body{
-			font-family: 'Ubuntu', sans-serif;
-			margin: 0;
-		}
-		.myGrid{
-			border: 0;
-		}
-		.myGrid .ui-grid-header-cell{
-			background-color: #f7f7f7;
-			border-color: #f0f0f0;
-		}
-
-/*// Config -----------------------------------
-@syntax-hue:          220;
-@syntax-saturation:   13%;
-@syntax-brightness:   18%;
-
-
-// Monochrome -----------------------------------
-@mono-1: hsl(@syntax-hue, 14%, 71%); // default text
-@mono-2: hsl(@syntax-hue,  9%, 55%);
-@mono-3: hsl(@syntax-hue, 10%, 40%);
-
-// Colors -----------------------------------
-@hue-1:   hsl(187, 47%, 55%); // <-cyan
-@hue-2:   hsl(207, 82%, 66%); // <-blue
-@hue-3:   hsl(286, 60%, 67%); // <-purple
-@hue-4:   hsl( 95, 38%, 62%); // <-green
-
-@hue-5:   hsl(355, 65%, 65%); // <-red 1
-@hue-5-2: hsl(  5, 48%, 51%); // <-red 2
-
-@hue-6:   hsl( 29, 54%, 61%); // <-orange 1
-@hue-6-2: hsl( 39, 67%, 69%); // <-orange 2
-
-
-// Base colors -----------------------------------
-@syntax-fg:     @mono-1;
-@syntax-bg:     hsl(@syntax-hue, @syntax-saturation, @syntax-brightness);
-@syntax-gutter: darken(@syntax-fg, 26%);
-@syntax-guide:  fade(@syntax-fg, 15%);
-@syntax-accent: hsl(@syntax-hue, 100%, 66% );*/
-	</style>
-	<script type="text/javascript">
-		(function(window){
-			'use strict';
-			window.onerror = function (msg, url, lineNo, columnNo, error) {
-				console.log('Error', JSON.stringify({
-					msg: msg,
-					url: url,
-					lineNo: lineNo,
-					columnNo: columnNo,
-					error: JSON.stringify(error)
-				}))
-				var url = "http://localhost:12345/event";
-				var method = "POST";
-				var postData = JSON.stringify({
-					msg: msg,
-					url: url,
-					lineNo: lineNo,
-					columnNo: columnNo,
-					error: JSON.stringify(error)
-				});
-				var async = true;
-				var request = new XMLHttpRequest();
-				request.open(method, url, async);
-				request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-				request.send(postData);
-			};
-			x.y
-		})(window);
-	</script>
+	<link rel="stylesheet" href="public/stylesheets/main.css">
+	<link rel="icon" href="public/favicon.ico?v=1.0.0" type="image/x-icon">
 </head>
 <body ng-app="BrowserEvent" ng-strict-di>
 	<div ng-controller="HomeController as home">
-		<h1>Browser Events</h1>
+		<h1>Browser Remote Event Viewer</h1>
 		<div ui-grid="home.gridOptions" class="myGrid"></div>
 	</div>
 
-	<script src="beh-client.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-grid/3.2.9/ui-grid.min.js"></script>
-	<script type="text/javascript">
-		(function(){
-			'use strict';
-
-			angular
-				.module('BrowserEvent', ['ui.grid'])
-				.run(Run)
-				.controller('HomeController', HomeController);
-
-			HomeController.$inject = ['$http'];
-
-			function Run() {
-				console.log('App Started');
-			}
-
-			function HomeController($http){
-				var vm = this;
-
-				vm.events = [];
-				vm.gridOptions = {
-					data: vm.events,
-					enableHorizontalScrollbar: 0,
-					enableVerticalScrollbar: 0
-				};
-
-				$http
-					.get('/events')
-					.then(function(res){
-						return vm.gridOptions.data = res.data;
-					})
-					.catch(function(err){
-						console.error(err);
-					});
-			}
-		})();
-	</script>
+	<script src="public/javascripts/app.js"></script>
 </body>
 </html>
