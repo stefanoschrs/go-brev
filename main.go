@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"os"
 	"fmt"
 	"log"
 	"time"
@@ -48,6 +49,11 @@ func CreateEventEndpointPreFlight(w http.ResponseWriter, req *http.Request) {
 }
 
 func main() {
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+
 	events = append(events, Event{ Message: "Uncaught ReferenceError: hello is not defined", URL: "https://0.0.0.0:12345/", LineNumber: 79, ColumnNumber: 4, ErrorObject: "{}", Timestamp: int32(time.Now().Unix()), })
 	events = append(events, Event{ Message: "Uncaught ReferenceError: world is not defined", URL: "https://0.0.0.0:12345/", LineNumber: 89, ColumnNumber: 8, ErrorObject: "{}", Timestamp: int32(time.Now().Unix()), })
 
@@ -57,10 +63,7 @@ func main() {
 	router.HandleFunc("/event", CreateEventEndpoint).Methods("POST")
 	router.HandleFunc("/event", CreateEventEndpointPreFlight).Methods("OPTIONS")
 
-	router.PathPrefix("/").Handler(http.FileServer(http.Dir("./public/")))
-	http.Handle("/", router)
-
-	log.Println("Server listening on port 12345")
-	err := http.ListenAndServeTLS(":12345", "cert.pem", "cert.key", router)
+	log.Println("Server listening on port " + port)
+	err := http.ListenAndServeTLS(":" + port, "cert.pem", "cert.key", router)
 	log.Fatal(err)
 }
