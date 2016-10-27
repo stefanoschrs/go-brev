@@ -2,17 +2,18 @@
 	'use strict';
 
 	angular
-		.module('BrowserEvent', ['ui.grid'])
+		.module('BREV', ['ui.grid'])
 		.run(Run)
+		.constant('SERVER_URL', 'https://0.0.0.0:8080/events')
 		.controller('HomeController', HomeController);
 
-	HomeController.$inject = ['$http'];
+	HomeController.$inject = ['$http', 'SERVER_URL'];
 
 	function Run() {
-		console.log('App Started');
+		console.log('BREV Started');
 	}
 
-	function HomeController($http){
+	function HomeController($http, SERVER_URL){
 		var vm = this;
 
 		vm.events = [];
@@ -25,20 +26,19 @@
 					field: 'msg'
 				},
 				{
-					field: 'error'
-				},
-				{
-					field: 'url'
+					field: 'uuid',
+					displayName: 'Client',
+					width: '310'
 				},
 				{
 					field: 'time',
-					width: '101'
+					width: '105'
 				}
 			]
 		};
 
 		$http
-			.get('https://0.0.0.0:8080/events')
+			.get(SERVER_URL)
 			.then(function(res){
 				return vm.gridOptions.data = res.data.sort((a, b) => -(a.time - b.time));
 			})

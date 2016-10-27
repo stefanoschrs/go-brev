@@ -24,14 +24,14 @@ body{
 }
 
 h1,h2,h3,h4,h5,h6{
-	color: $hue-1;
+	color: $hue-4;
 }
 
 .myGrid{
 	border: 0;
 
 	.ui-grid-header-cell{
-		background-color: #f7f7f7;
-		border-color: #f0f0f0;
+		background-color: $mono-3;
+		color: #fff;
 	}
 }
