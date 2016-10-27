@@ -14,8 +14,8 @@ type Event struct {
 	Timestamp	int32
 	Message      string `json:"msg"`
 	URL          string `json:"url"`
-	LineNumber   string `json:"lineNo"`
-	ColumnNumber string `json:"columnNo"`
+	LineNumber   int `json:"lineNo"`
+	ColumnNumber int `json:"columnNo"`
 	ErrorObject  string `json:"error"`
 }
 
@@ -48,8 +48,8 @@ func CreateEventEndpointPreFlight(w http.ResponseWriter, req *http.Request) {
 }
 
 func main() {
-	events = append(events, Event{ Timestamp: int32(time.Now().Unix()), Message: "test msg", URL: "test url", LineNumber: "test lineNo", ColumnNumber: "test columnNo", ErrorObject: "test error", })
-	events = append(events, Event{ Timestamp: int32(time.Now().Unix()), Message: "test 1 msg", URL: "test 1 url", LineNumber: "test 1 lineNo", ColumnNumber: "test 1 columnNo", ErrorObject: "test 1 error", })
+	events = append(events, Event{ Message: "Uncaught ReferenceError: hello is not defined", URL: "https://0.0.0.0:12345/", LineNumber: 79, ColumnNumber: 4, ErrorObject: "{}", Timestamp: int32(time.Now().Unix()), })
+	events = append(events, Event{ Message: "Uncaught ReferenceError: world is not defined", URL: "https://0.0.0.0:12345/", LineNumber: 89, ColumnNumber: 8, ErrorObject: "{}", Timestamp: int32(time.Now().Unix()), })
 
 	router := mux.NewRouter()
 
@@ -60,5 +60,7 @@ func main() {
 	router.PathPrefix("/").Handler(http.FileServer(http.Dir("./public/")))
 	http.Handle("/", router)
 
-	log.Fatal(http.ListenAndServe(":12345", router))
+	log.Println("Server listening on port 12345")
+	err := http.ListenAndServeTLS(":12345", "cert.pem", "cert.key", router)
+	log.Fatal(err)
 }
